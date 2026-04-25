@@ -187,9 +187,6 @@ export default function Home() {
                 <div className="w-2.5 h-2.5 rounded-full bg-white" />
               </div>
               <span className="font-bold text-[#1e1b4b] text-base tracking-tight">Audia</span>
-              <span className="text-[9px] font-bold text-[#94a3b8] border border-[#e2e8f2] rounded px-1.5 py-0.5 tracking-widest ml-1">
-                BETA
-              </span>
             </div>
             <p className="text-[10px] text-[#94a3b8] mt-2 leading-relaxed">
               Record conversations — speakers identified automatically.
@@ -255,9 +252,6 @@ export default function Home() {
                 <div className="w-2 h-2 rounded-full bg-white" />
               </div>
               <span className="font-bold text-[#1e1b4b] text-sm">Audia</span>
-              <span className="text-[9px] font-bold text-[#94a3b8] border border-[#e2e8f2] rounded px-1.5 py-0.5 tracking-widest">
-                BETA
-              </span>
             </div>
             {userEmail && (
               <button
@@ -327,7 +321,12 @@ export default function Home() {
                 />
 
                 {status === "done" && segments.length > 0 && (
-                  <ChatPanel segments={segments} />
+                  <ChatPanel
+                    segments={segments}
+                    transcriptionId={currentTranscriptId ?? undefined}
+                    currentTitle={currentTitle}
+                    onTitleSave={setCurrentTitle}
+                  />
                 )}
               </section>
             )}

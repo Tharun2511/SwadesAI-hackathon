@@ -58,11 +58,10 @@ export default function HistoryEntry({
 
   return (
     <div
-      className={`bg-white rounded-xl border overflow-hidden transition-shadow ${
-        expanded
-          ? "border-[#ddd6fe] shadow-md"
-          : "border-[#e2e8f2] shadow-sm hover:shadow-md hover:border-[#ddd6fe]"
-      }`}
+      className={`bg-white rounded-xl border overflow-hidden transition-shadow ${expanded
+        ? "border-[#ddd6fe] shadow-md"
+        : "border-[#e2e8f2] shadow-sm hover:shadow-md hover:border-[#ddd6fe]"
+        }`}
     >
       {/* Accent line at top — shows only when expanded */}
       {expanded && (
@@ -80,7 +79,7 @@ export default function HistoryEntry({
             <TitleInput
               transcriptionId={record.id}
               initialTitle={record.title}
-              fallback={date.toLocaleString()}
+              fallback={`${date.toLocaleString()} (Rename title)`}
               onSaved={(t) => onTitleUpdate(record.id, t)}
             />
           </div>

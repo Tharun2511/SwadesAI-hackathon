@@ -137,7 +137,7 @@ export default function TranscriptPanel({
                       : "border-[#e2e8f2] text-[#64748b] hover:border-[#c4b5fd] hover:text-[#6d28d9]"
                   }`}
                 >
-                  Rename
+                  Rename Users
                 </button>
               )}
             </div>

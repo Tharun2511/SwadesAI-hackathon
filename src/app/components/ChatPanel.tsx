@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import type { TranscriptSegment } from "@/entity/Transcription";
 import { formatDuration } from "./utils";
+import TitleInput from "./TitleInput";
 
 type Message = {
   role: "user" | "assistant";
@@ -18,6 +19,10 @@ const QUICK_PROMPTS = [
 
 interface Props {
   segments: TranscriptSegment[];
+  /** When provided, renders a renameable transcript title in the panel header */
+  transcriptionId?: string;
+  currentTitle?: string | null;
+  onTitleSave?: (title: string | null) => void;
 }
 
 function buildPrompt(segments: TranscriptSegment[], question: string): string {
@@ -27,7 +32,7 @@ function buildPrompt(segments: TranscriptSegment[], question: string): string {
   return `You are a helpful assistant analyzing a conversation transcript. Answer the question concisely and clearly based only on what's in the transcript.\n\nTranscript:\n${transcript}\n\nQuestion: ${question}`;
 }
 
-export default function ChatPanel({ segments }: Props) {
+export default function ChatPanel({ segments, transcriptionId, currentTitle, onTitleSave }: Props) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -100,32 +105,51 @@ export default function ChatPanel({ segments }: Props) {
 
   return (
     <div className="bg-white rounded-xl border border-[#e2e8f2] overflow-hidden shadow-sm">
-      {/* Teal accent bar — visually distinct from the violet summary bar */}
+      {/* Teal accent bar — distinct from the violet summary bar */}
       <div className="h-[3px] bg-gradient-to-r from-[#0369a1] via-[#0ea5e9] to-[#38bdf8]" />
 
-      {/* Toggle header */}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-[#f8fafc] transition-colors text-left"
-      >
-        <div className="flex items-center gap-2.5">
+      {/* Header: title (left) + chevron (right) */}
+      <div className="flex items-center justify-between px-4 py-3.5 hover:bg-[#f8fafc] transition-colors">
+
+        <div className="flex items-center gap-2.5 flex-1 min-w-0">
           <div className="w-5 h-5 rounded-full bg-[#f0f9ff] border border-[#bae6fd] flex items-center justify-center flex-shrink-0 text-[11px]">
             💬
           </div>
-          <span className="text-sm font-semibold text-[#1e1b4b]">Ask about this transcript</span>
+
+          {/* If transcriptionId is provided, show a renameable transcript title */}
+          {transcriptionId && onTitleSave ? (
+            <TitleInput
+              transcriptionId={transcriptionId}
+              initialTitle={currentTitle ?? null}
+              fallback="Untitled — click to name"
+              onSaved={onTitleSave}
+            />
+          ) : (
+            <span className="text-sm font-semibold text-[#1e1b4b]">Ask about this transcript</span>
+          )}
+
           {questionCount > 0 && (
-            <span className="text-[10px] bg-[#f0f9ff] text-[#0369a1] border border-[#bae6fd] rounded-full px-2 py-0.5 font-semibold">
+            <span className="text-[10px] bg-[#f0f9ff] text-[#0369a1] border border-[#bae6fd] rounded-full px-2 py-0.5 font-semibold flex-shrink-0">
               {questionCount}
             </span>
           )}
         </div>
-        <span
-          className="text-[#94a3b8] text-sm select-none transition-transform duration-200"
-          style={{ display: "inline-block", transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+
+        {/* Chevron — only thing that toggles open/close */}
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="ml-2 p-1 text-[#94a3b8] hover:text-[#64748b] transition-colors flex-shrink-0"
+          aria-label={open ? "Collapse" : "Expand"}
         >
-          ▾
-        </span>
-      </button>
+          <span
+            className="text-sm select-none block transition-transform duration-200"
+            style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+          >
+            ▾
+          </span>
+        </button>
+
+      </div>
 
       {open && (
         <div className="border-t border-[#e2e8f2]">
@@ -161,7 +185,6 @@ export default function ChatPanel({ segments }: Props) {
                         : "bg-[#f8fafc] border border-[#e2e8f2] text-[#334155] rounded-tl-sm"
                     }`}
                   >
-                    {/* Typing indicator: empty assistant message still streaming */}
                     {msg.role === "assistant" && msg.streaming && msg.content === "" ? (
                       <span className="inline-flex items-center gap-1 py-0.5">
                         {[0, 0.2, 0.4].map((delay, j) => (
@@ -175,7 +198,6 @@ export default function ChatPanel({ segments }: Props) {
                     ) : (
                       <>
                         <span className="whitespace-pre-wrap">{msg.content}</span>
-                        {/* Blinking cursor while streaming content */}
                         {msg.streaming && (
                           <span className="inline-block w-[2px] h-[14px] bg-current ml-0.5 align-middle opacity-60 animate-pulse" />
                         )}

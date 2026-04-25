@@ -50,6 +50,18 @@ export default function EmailGate({ open, userEmail, onSubmit, onClose }: Props)
                   ? "Enter a different email to switch accounts."
                   : "Enter your email to save and access your sessions from any device."}
               </p>
+              {!userEmail && (
+                <p className="text-xs text-[#94a3b8] mt-3">
+                  Hackathon examiner? Use{" "}
+                  <button
+                    type="button"
+                    onClick={() => setValue("tester@audia.dev")}
+                    className="text-[#6d28d9] underline underline-offset-2 hover:text-[#5b21b6] transition-colors"
+                  >
+                    tester@audia.dev
+                  </button>
+                </p>
+              )}
             </div>
             {userEmail && (
               <button
