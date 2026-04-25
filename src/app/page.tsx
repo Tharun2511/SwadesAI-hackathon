@@ -6,6 +6,7 @@ import RecorderPanel from "./components/RecorderPanel";
 import FileUpload from "./components/FileUpload";
 import SummaryBlock from "./components/SummaryBlock";
 import TranscriptPanel from "./components/TranscriptPanel";
+import ChatPanel from "./components/ChatPanel";
 import SessionHistory from "./components/SessionHistory";
 
 const EMAIL_KEY = "transcriber_email";
@@ -324,6 +325,10 @@ export default function Home() {
                   onTitleSave={setCurrentTitle}
                   isProcessing={status === "processing"}
                 />
+
+                {status === "done" && segments.length > 0 && (
+                  <ChatPanel segments={segments} />
+                )}
               </section>
             )}
 

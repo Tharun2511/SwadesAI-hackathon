@@ -5,6 +5,7 @@ import { buildColorMap, formatDuration } from "./utils";
 import TitleInput from "./TitleInput";
 import SummaryBlock from "./SummaryBlock";
 import TranscriptPanel from "./TranscriptPanel";
+import ChatPanel from "./ChatPanel";
 
 type HistoryRecord = {
   id: string;
@@ -141,6 +142,7 @@ export default function HistoryEntry({
             transcriptionId={record.id}
             onSegmentsUpdate={(updated) => onSegmentsUpdate(record.id, updated)}
           />
+          <ChatPanel segments={record.segments} />
         </div>
       )}
     </div>
