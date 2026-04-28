@@ -1,6 +1,6 @@
-# Verbis — AI Meeting Transcriber
+# Audia — AI Meeting Transcriber
 
-Verbis is an AI-powered meeting transcription app that records conversations directly in the browser, automatically identifies multiple speakers, and generates an AI summary. Transcripts are saved per user by email and accessible across devices.
+Audia is an AI-powered meeting transcription app that records conversations directly in the browser, automatically identifies multiple speakers, and generates an AI summary. Transcripts are saved per user by email and accessible across devices.
 
 ## Features
 
